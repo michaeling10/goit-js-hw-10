@@ -6,6 +6,7 @@ import {
   displayLoader,
   notDisplayLoader,
 } from './cat-api';
+import TomSelect from 'tom-select';
 
 const breedSelect = document.querySelector('.breed-select');
 const catImage = document.getElementById('cat-image');
@@ -23,17 +24,23 @@ fetchBreeds().then(breeds => {
 });
 
 function populateBreeds(breeds) {
-  breeds.forEach(breed => {
-    const option = document.createElement('option');
-    option.value = breed.id;
-    option.text = breed.name;
-    breedSelect.appendChild(option);
-    breedSelect.style.display = 'block';
+  const options = breeds.map(breed => ({ value: breed.id, text: breed.name }));
+
+  const select = new TomSelect(breedSelect, {
+    hideSelected: false,
+    options: options,
+    placeholder: 'Select a breed...',
+    onChange: changeBreeds,
+    sortField: {
+      field: 'dropdown',
+      direction: 'asc',
+    },
   });
 }
 
 function changeBreeds() {
-  const breedIdSelected = breedSelect.value;
+  const selectedOption = breedSelect.options[breedSelect.selectedIndex];
+  const breedIdSelected = selectedOption.value;
 
   if (breedIdSelected) {
     displayLoader();
@@ -43,6 +50,7 @@ function changeBreeds() {
       })
       .catch(error => {
         console.error('Error fetching cat data:', error);
+
         hideCatInfo();
       })
       .finally(() => {

@@ -1,12 +1,12 @@
 'use-strict';
 
 import axios from 'axios';
+import Notiflix from 'notiflix';
 
 axios.defaults.headers.common['x-api-key'] =
   'live_lHLgk6t6JnyQ3R7xuYiZvdDYzu9CrDDdj53eJkAs5ltLOKrE8lsxfNFlcSAubK8z';
 
 const loader = document.querySelector('.loader');
-const breedSelect = document.querySelector('.breed-select');
 
 export function fetchBreeds() {
   return axios
@@ -19,8 +19,13 @@ export function fetchBreeds() {
 }
 
 function errorMessage() {
-  const errorMessageElement = document.querySelector('.error');
-  errorMessageElement.style.display = 'block';
+  Notiflix.Notify.failure(
+    'Oops! Something went wrong! Try reloading the page.',
+    {
+      position: 'center-top',
+      closeButton: true,
+    }
+  );
   notDisplayLoader();
 }
 
