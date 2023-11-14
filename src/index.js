@@ -29,12 +29,7 @@ function populateBreeds(breeds) {
   const select = new TomSelect(breedSelect, {
     hideSelected: false,
     options: options,
-    placeholder: 'Select a breed...',
-    onChange: changeBreeds,
-    sortField: {
-      field: 'dropdown',
-      direction: 'asc',
-    },
+    placeholder: 'Select a Breed...',
   });
 }
 
@@ -44,13 +39,13 @@ function changeBreeds() {
 
   if (breedIdSelected) {
     displayLoader();
+
     fetchCatByBreed(breedIdSelected)
       .then(catData => {
         displayInfo(catData[0]);
       })
       .catch(error => {
         console.error('Error fetching cat data:', error);
-
         hideCatInfo();
       })
       .finally(() => {
@@ -60,13 +55,12 @@ function changeBreeds() {
 }
 
 function displayInfo(catData) {
-  catImage.src = catData.url;
-
   breedName.textContent = catData.breeds[0].name || 'No description available';
   description.textContent =
     catData.breeds[0].description || 'No description available';
   temperament.textContent =
     catData.breeds[0].temperament || 'No information available';
+  catImage.src = catData.url;
   catInfo.style.display = 'flex';
 }
 
